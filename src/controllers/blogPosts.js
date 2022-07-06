@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+const cache = require("../utils/routeCache");
 const dataSource = require("../dataSource");
 const { validateQuery } = require("../utils/validateQuery");
 const { sortPosts } = require("../utils/sortPosts");
@@ -15,7 +16,7 @@ router.get("/ping", async (_, res) => {
   }
 });
 
-router.get("/posts", async (req, res) => {
+router.get("/posts", cache(300), async (req, res) => {
   const errMessage = validateQuery(req.query);
 
   if (errMessage.length > 0) {
